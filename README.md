@@ -1,25 +1,14 @@
-﻿
-#  dd-window_control
-
-  
+﻿# dd-window_control
 
 A simple FiveM resource that controls the windows in a car, without a bulky menu
 
-  
-
-#  Information
-
-  
+# Information
 
 This script, developed under the alias "Duck Development", is a very simple script for the popular GTA Modding framework, FiveM.
 
 Made completely in the [LUA programming language](https://www.lua.org/), using [FiveM natives](https://docs.fivem.net/natives/), it is super to understand and make any edits to.
 
-  
-
-#  Configuration
-
-  
+# Configuration
 
 There is a simple "config.lua" file with everything that could be needed for such a simple script.
 
