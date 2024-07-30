@@ -2,7 +2,7 @@
 * VARIABLES
 --]]
 
-local resourceName = 'dd-window_control'
+local resourceName = GetCurrentResourceName()
 local discordInvite = 'https://discord.gg/3rMN9uZAnf'
 local art = [[
 
