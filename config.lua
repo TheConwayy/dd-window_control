@@ -15,3 +15,6 @@ Config.SendChatMessage = true
 
 -- Whether or not only the driver can control windows --
 Config.DriverOnly = true
+
+-- Whether or not to check for version updates (recommended to keep set to 'true') --
+Config.CheckForUpdates = true
