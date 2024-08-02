@@ -80,7 +80,7 @@ end
 -- If debug mode is on, then list all configs and their values
 if Config.DebugMode then
   for k,v in pairs(Config) do
-    print('Config "' .. k .. '" is set to: ' .. tostring(v))
+    debug('Config "' .. k .. '" is set to: ' .. tostring(v))
   end
 end
 
