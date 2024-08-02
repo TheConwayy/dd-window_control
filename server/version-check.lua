@@ -45,8 +45,8 @@ if Config.CheckForUpdates then
     local installedVersion = trim(GetInstalledVersion())
 
     -- Print versions
-    print('Installed version: ' .. installedVersion)
-    print('Latest version: ' .. latestVersion)
+    print('(^3' .. resourceName .. '^7) Installed version: ' .. installedVersion)
+    print('(^3' .. resourceName .. '^7) Latest version: ' .. latestVersion)
 
     -- Print if update is needed or not
     if latestVersion ~= installedVersion then

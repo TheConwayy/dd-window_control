@@ -1,3 +1,5 @@
+local resourceName = GetCurrentResourceName()
+
 --[[
 * FUNCTIONS
 --]]
@@ -5,7 +7,7 @@
 -- Function for debugging
 local function debug(string)
   if Config.DebugMode then
-    print(string)
+    print('[' .. resourceName .. '] ^3DEBUG^7: ' .. string)
   end
 end
 
@@ -41,7 +43,7 @@ function openOrCloseWindow(playerPed, windowIndex)
     if playerVehicle > 0 and GetPedInVehicleSeat(playerVehicle, -1) == playerPed then
       debug('(openOrCloseWindow function) playerVehicle exists and player executing command is in driver seat')
       local isWindowOpen = IsVehicleWindowIntact(playerVehicle, windowIndex)
-      debug(isWindowOpen)
+      debug(tostring(isWindowOpen))
       if isWindowOpen then
         RollDownWindow(playerVehicle, windowIndex)
         sendChatMessage('The ' .. windowIndexToString(windowIndex) .. ' window has been rolled ^1down^r')
@@ -164,3 +166,14 @@ RegisterKeyMapping('-toggleflwindow', 'Toggle front left window', 'keyboard', 'H
 RegisterKeyMapping('-togglefrwindow', 'Toggle front right window', 'keyboard', 'PAGEUP')
 RegisterKeyMapping('-togglerlwindow', 'Toggle rear left window', 'keyboard', 'END')
 RegisterKeyMapping('-togglerrwindow', 'Toggle rear right window', 'keyboard', 'PAGEDOWN')
+
+--[[
+* CONSOLE MESSAGES
+--]]
+
+-- Variables
+local discordInvite = 'https://discord.gg/3rMN9uZAnf'
+
+-- Print messages to console
+print('(^3' .. resourceName .. '^7) Resource has been ^2STARTED^7')
+print('For support, join our Discord! ^3' .. discordInvite .. '^7')

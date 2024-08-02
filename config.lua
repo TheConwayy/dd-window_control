@@ -4,9 +4,6 @@ Config = {}
 -- Debug mode will log EVERYTHING, and may cause lag on bigger servers. Only use this if you need it, or if asked by support --
 Config.DebugMode = false
 
--- Enable or disable to branding printed to the console on start of the server --
-Config.ConsoleBranding = true
-
 -- Enable chat commands /fl, /fr, /rl, /rr --
 Config.ChatCommands = false
 
