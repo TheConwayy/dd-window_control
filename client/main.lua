@@ -88,6 +88,8 @@ end
 if not Config.ChatCommands then
   TriggerEvent('chat:removeSuggestion', '/fl')
   TriggerEvent('chat:removeSuggestion', '/fr')
+  TriggerEvent('chat:removeSuggestion', '/rl')
+  TriggerEvent('chat:removeSuggestion', '/rr')
 end
 
 --[[
