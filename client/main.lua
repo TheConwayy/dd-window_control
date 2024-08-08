@@ -5,24 +5,53 @@ local resourceName = GetCurrentResourceName()
 --]]
 
 -- Function for debugging
-local function debug(string)
-  if Config.DebugMode then
-    print('[' .. resourceName .. '] ^3DEBUG^7: ' .. string)
-  end
+local function debug(message)
+  exports.ddUtils:debug(Config, resourceName, message)
 end
 
--- Function to send a chat message
-local function sendChatMessage(string)
-  if Config.SendChatMessage then
-    TriggerEvent('chat:addMessage', {
-    args = { '^4^*Window Control^7: ^r' .. string }
-  })
-  debug('Window control chat message sent')
+-- Function to check notification method
+local function checkNotificationMethod(method)
+  local methods = { 'CHAT', 'ABOVE_MINIMAP', 'TOP_LEFT' }
+  debug('(checkNotificationMethod function) method gathered: "' .. method .. '"')
+  return exports.ddUtils:stringInTable(methods, method)
+end
+
+-- Function to get correct colors
+local function color(colorWanted)
+  local format = 0
+  if Config.NotificationMethod ~= 'CHAT' then
+    format = 1
+  else
+    format = 0
+  end
+  debug('(color function) format set to: ' .. tostring(format))
+  return exports.ddUtils:color(format, colorWanted)
+end
+
+-- Function to send notification according to the config
+local function notify(message)
+  if Config.Notfications then
+    local method = Config.NotificationMethod
+    debug('(notify function) method gathered: "' .. method .. '"')
+    if not checkNotificationMethod(method) then
+      exports.ddUtils:consoleErr(resourceName, 'You must provide a valid "NotificationMethod" in the config.lua')
+      return
+    end
+    message = message .. color('white')
+    debug('(notify function) formatted message: "' .. message .. '"')
+    if method == 'CHAT' then
+      exports.ddUtils:sendChatMessage('Window Control', message)
+    elseif method == 'ABOVE_MINIMAP' then
+      exports.ddUtils:showNotification(message, false)
+    elseif 'TOP_LEFT' then
+      exports.ddUtils:showAlert(message, 0, false, -1)
+    end
   end
 end
 
 -- Function to take a window index and return a string
 local function windowIndexToString(windowIndex)
+  debug ('(windowIndexToString function) window index gathered: ' .. tostring(windowIndex))
   if windowIndex == 0 then
     return 'front left'
   elseif windowIndex == 1 then
@@ -43,14 +72,14 @@ function openOrCloseWindow(playerPed, windowIndex)
     if playerVehicle > 0 and GetPedInVehicleSeat(playerVehicle, -1) == playerPed then
       debug('(openOrCloseWindow function) playerVehicle exists and player executing command is in driver seat')
       local isWindowOpen = IsVehicleWindowIntact(playerVehicle, windowIndex)
-      debug(tostring(isWindowOpen))
+      debug('(openOrCloseWindow function) Is window open: ' .. tostring(isWindowOpen))
       if isWindowOpen then
         RollDownWindow(playerVehicle, windowIndex)
-        sendChatMessage('The ' .. windowIndexToString(windowIndex) .. ' window has been rolled ^1down^r')
+        notify('The ' .. windowIndexToString(windowIndex) .. ' window has been rolled ' .. color('red') .. 'down')
         debug('(openOrCloseWindow function) window rolled down')
       else
         RollUpWindow(playerVehicle, windowIndex)
-        sendChatMessage('The ' .. windowIndexToString(windowIndex) .. ' window has been rolled ^2up^r')
+        notify('The ' .. windowIndexToString(windowIndex) .. ' window has been rolled ' .. color('green') .. 'up')
         debug('(openOrCloseWindow function) window rolled up')
       end
     end
@@ -62,11 +91,11 @@ function openOrCloseWindow(playerPed, windowIndex)
       debug(isWindowOpen)
       if isWindowOpen then
         RollDownWindow(playerVehicle, windowIndex)
-        sendChatMessage('The ' .. windowIndexToString(windowIndex) .. ' window has been rolled ^1down^r')
+        notify('The ' .. windowIndexToString(windowIndex) .. ' window has been rolled ' .. color('red') .. 'down')
         debug('(openOrCloseWindow function) window rolled down')
       else
         RollUpWindow(playerVehicle, windowIndex)
-        sendChatMessage('The ' .. windowIndexToString(windowIndex) .. ' window has been rolled ^2up^r')
+        notify('The ' .. windowIndexToString(windowIndex) .. ' window has been rolled ' .. color('green') .. 'up')
         debug('(openOrCloseWindow function) window rolled up')
       end
     end
@@ -77,12 +106,8 @@ end
 * MISC. CHECKS
 --]]
 
--- If debug mode is on, then list all configs and their values
-if Config.DebugMode then
-  for k,v in pairs(Config) do
-    debug('Config "' .. k .. '" is set to: ' .. tostring(v))
-  end
-end
+-- Check config
+exports.ddUtils:checkConfig(Config)
 
 -- If chat commands are disabled, remove the suggestions
 if not Config.ChatCommands then
@@ -90,6 +115,7 @@ if not Config.ChatCommands then
   TriggerEvent('chat:removeSuggestion', '/fr')
   TriggerEvent('chat:removeSuggestion', '/rl')
   TriggerEvent('chat:removeSuggestion', '/rr')
+  debug('Chat suggestions have been removed, if not already')
 end
 
 --[[
@@ -158,6 +184,7 @@ if Config.ChatCommands then
       help = 'Toggle your rear right window'
     },
   })
+  debug('Chat suggestions have been added, if not already')
 end
 
 --[[
@@ -168,14 +195,3 @@ RegisterKeyMapping('-toggleflwindow', 'Toggle front left window', 'keyboard', 'H
 RegisterKeyMapping('-togglefrwindow', 'Toggle front right window', 'keyboard', 'PAGEUP')
 RegisterKeyMapping('-togglerlwindow', 'Toggle rear left window', 'keyboard', 'END')
 RegisterKeyMapping('-togglerrwindow', 'Toggle rear right window', 'keyboard', 'PAGEDOWN')
-
---[[
-* CONSOLE MESSAGES
---]]
-
--- Variables
-local discordInvite = 'https://discord.gg/3rMN9uZAnf'
-
--- Print messages to console
-print('(^3' .. resourceName .. '^7) Resource has been ^2STARTED^7')
-print('For support, join our Discord! ^3' .. discordInvite .. '^7')

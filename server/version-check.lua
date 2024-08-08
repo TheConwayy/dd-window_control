@@ -1,3 +1,5 @@
+local resourceName = GetCurrentResourceName()
+
 --[[
 * FUNCTIONS
 --]]
@@ -12,15 +14,23 @@ local function trim(s)
   return (s:gsub("^%s*(.-)%s*$", "%1"))
 end
 
+-- Function to print message to console
+local function printMess(message)
+  exports.ddUtils:consoleMessage(resourceName, message)
+end
+
+-- Function to print error to console
+local function printErr(err)
+  exports.ddUtils:consoleErr(resourceName, err)
+end
+
 --[[
 * VARIABLES
 --]]
 
 -- Endpoint to get latest version from GitHub
 local endpoint = 'https://raw.githubusercontent.com/TheConwayy/fivem-versions/main/dd-window_control.txt'
-
--- Name of the resource
-local resourceName = GetCurrentResourceName()
+local releasesPage = 'https://github.com/TheConwayy/dd-window_control/releases'
 
 --[[
 * VERSION CHECKING
@@ -30,13 +40,13 @@ local resourceName = GetCurrentResourceName()
 if Config.CheckForUpdates then
 
   -- Wait to avoid spam
-  Citizen.Wait(500)
+  Citizen.Wait(1500)
 
   -- Perform request to get current version
-  PerformHttpRequest(endpoint, function (err, text, headers)
+  PerformHttpRequest(endpoint, function (_, text, _)
     -- Nil check
     if (text == nil) then
-      print('^1There was an error check for the latest version. If this issue persists, please open a ticket in this Discord: https://discord.gg/3rMN9uZAnf^7')
+      printErr('^1There was an error checking for the latest version. If this issue persists, please open a ticket in this Discord: https://discord.gg/3rMN9uZAnf^7')
       return
     end
 
@@ -45,17 +55,19 @@ if Config.CheckForUpdates then
     local installedVersion = trim(GetInstalledVersion())
 
     -- Print versions
-    print('(^3' .. resourceName .. '^7) Installed version: ' .. installedVersion)
-    print('(^3' .. resourceName .. '^7) Latest version: ' .. latestVersion)
+    printMess('Installed version: ' .. installedVersion)
+    printMess('Latest version: ' .. latestVersion)
 
     -- Print if update is needed or not
     if latestVersion ~= installedVersion then
-      print('^1Your "^7' .. resourceName .. '^1" script is out-of-date! You can get the latest version here:^7 https://github.com/TheConwayy/dd-window_control/releases.')
+      printMess('^1Script is out-of-date! You can get the latest version here: ^7' .. releasesPage)
+      printMess('==================================================')
     else
-      print('^2Your "^7' .. resourceName .. '^2" script is up-to-date! Have fun!^7')
+      printMess('Script is up-to-date!')
+      printMess('==================================================')
     end
   end)
 else
   -- If update checks are disable, encourge to enable them
-  print('^1Update checking for "^7' .. resourceName .. '^1" is disabled! ^7We highly recommend that you enable it to make sure you have the latest features.^7')
+  printErr('Update checking is disabled! We highly recommend that you enable it to make sure you have the latest features.')
 end
