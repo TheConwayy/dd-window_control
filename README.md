@@ -8,6 +8,9 @@ This script, developed under the alias "Duck Development", is a very simple scri
 
 Made completely in the [LUA programming language](https://www.lua.org/), using [FiveM natives](https://docs.fivem.net/natives/), it is super to understand and make any edits to.
 
+**!!! THIS RESOURCE DEPENDS ON "ddUtils" !!!**
+_Please ensure that you have the resource installed and started **before** this resource._
+
 # Configuration
 
 There is a simple "config.lua" file with everything that could be needed for such a simple script.
